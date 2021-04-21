@@ -1,0 +1,49 @@
+Создание TСP клиента
+
+Подключение к удаленному серверу осуществляется с помощью вызова метода connect.
+public class VertxTcpClientVerticle extends AbstractVerticle {
+  public void start() {
+    NetClient tcpClient = vertx.createNetClient();
+    tcpClient.connect(80, "localhost", new Han-dler<AsyncResult<NetSocket>>(){
+        @Override
+        public void handle(AsyncResult<NetSocket> result) {
+            NetSocket socket = result.result();
+        }
+    });
+  }
+}
+Запись данных по TCP протоколу осуществляется через метод экземпляра NetSocket write. Пример:
+public class VertxTcpClientVerticle extends AbstractVerticle {
+    public void start() {
+        NetClient tcpClient = vertx.createNetClient();
+        tcpClient.connect(80, "localhost",
+          new Handler<AsyncResult<NetSocket>>(){
+          @Override
+          public void handle(AsyncResult<NetSocket> result) {
+            NetSocket socket = result.result();
+            socket.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n");
+          }
+        });
+    }
+}
+Для прочтения данных из NetSocket, необходимо поместить метод-обработчик на NetSocket.
+public class VertxTcpClientVerticle extends AbstractVerticle {
+  public void start() {
+    NetClient tcpClient = vertx.createNetClient();
+    tcpClient.connect(80, "localhost",
+      new Handler<AsyncResult<NetSocket>>(){
+      @Override
+      public void handle(AsyncResult<NetSocket> result) {
+        NetSocket socket = result.result();
+        socket.write("GET / HTTP/1.1\r\nHost: localhost\r\n\r\n");
+        socket.handler(new Handler<Buffer>(){
+            @Override
+            public void handle(Buffer buffer) {
+                System.out.println("Received data: " + buffer.length());
+                System.out.println(buffer.getString(0, buff-er.length()));
+            }
+        });
+      }
+    });
+  }
+}
