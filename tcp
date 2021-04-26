@@ -1,0 +1,45 @@
+Для считывания данных из входящих соединений необходимо установить обработчик на объекте NetSocket
+public class VertxTcpServerVerticle extends AbstractVerticle {
+  @Override
+  public void start() throws Exception {
+      NetServer server = vertx.createNetServer();
+      server.connectHandler(new Handler<NetSocket>() {
+          @Override
+          public void handle(NetSocket netSocket) {
+              System.out.println("Incoming connection!");
+              netSocket.handler(new Handler<Buffer>() {
+                @Override
+                public void handle(Buffer buffer) {
+                  System.out.println("incoming data: "+buffer.length());
+                  buffer.getString(0,buffer.length());
+                }
+              });
+          }
+      });
+      server.listen(10000);
+  }
+}
+После обработки входящих данных, можно написать ответ клиенту, для чего экземпляр NetSocket передается методу handle обработчика соединений.
+public class VertxTcpServerVerticle extends AbstractVerticle {
+  @Override
+  public void start() throws Exception {
+    NetServer server = vertx.createNetServer();
+    server.connectHandler(new Handler<NetSocket>() {
+      @Override
+      public void handle(NetSocket netSocket) {
+          System.out.println("Incoming connection!");
+          netSocket.handler(new Handler<Buffer>() {
+            @Override
+            public void handle(Buffer inBuffer) {
+              System.out.println("incoming data: " + inBuffer.length());
+              String data = inBuffer.getString(0, inBuffer.length());
+              Buffer outBuffer = Buffer.buffer();
+              outBuffer.appendString("response...");
+              netSocket.write(outBuffer);
+            }
+          });
+      }
+    });
+    server.listen(10000);
+  }
+}
