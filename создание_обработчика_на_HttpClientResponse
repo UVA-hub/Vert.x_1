@@ -1,0 +1,12 @@
+httpClient.getNow(80, "localhost", "/", new Han-dler<HttpClientResponse>() {
+  @Override
+  public void handle(HttpClientResponse httpClientResponse) {
+      httpClientResponse.bodyHandler(new Handler<Buffer>() {
+          @Override
+          public void handle(Buffer buffer) {
+            System.out.println("Response (" + buffer.length() + "): ");
+            System.out.println(buffer.getString(0, buffer.length()));
+          }
+      });
+  }
+});
