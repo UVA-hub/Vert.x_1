@@ -1,0 +1,33 @@
+Для обработки входящих HTTP запросов необходимо задать обработчик запросов на HTTP сервере. Делается это следующим образом:
+
+public class VertxHttpServerVerticle extends AbstractVerticle {
+    private HttpServer httpServer = null;
+    @Override
+    public void start() throws Exception {
+        httpServer = vertx.createHttpServer();
+        httpServer.requestHandler(new Handler<HttpServerRequest>() {
+            @Override
+            public void handle(HttpServerRequest request) {
+                System.out.println("incoming request!");
+            }
+        });
+        httpServer.listen(10000);
+    }
+}
+
+Если HTTP запрос является POST запросом, то его тело подлежит разбору в обработчике:
+
+httpServer.requestHandler(new Handler<HttpServerRequest>() {
+    @Override
+    public void handle(HttpServerRequest request) {
+        System.out.println("incoming request!");
+        if (request.method() == HttpMethod.POST){
+            request.handler(new Handler<Buffer>() {
+                @Override
+                public void handle(Buffer buffer) {
+                  ...............................
+                }
+            });
+        }
+    }
+});
