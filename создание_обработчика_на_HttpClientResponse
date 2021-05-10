@@ -1,4 +1,4 @@
-1) После создания HTTP клиента можно отправить GET запрос, используя метод getNow:
+1.После создания HTTP клиента можно отправить GET запрос, используя метод getNow:
 httpClient.getNow(80, "localhost", "/", new Han-dler<HttpClientResponse>() {
     @Override
     public void handle(HttpClientResponse httpClientResponse) {
@@ -6,7 +6,7 @@ httpClient.getNow(80, "localhost", "/", new Han-dler<HttpClientResponse>() {
     }
 });
 
-2) Если не требуется получать доступ к телу ответа, его можно обработать уже в обработчике getNow. Однако если надо получить доступ к телу HTTP ответа, необходимо зарегистрировать еще один обработчик на HttpClientResponse: 
+2.Если не требуется получать доступ к телу ответа, его можно обработать уже в обработчике getNow. Однако если надо получить доступ к телу HTTP ответа, необходимо зарегистрировать еще один обработчик на HttpClientResponse: 
 httpClient.getNow(80, "localhost", "/", new Han-dler<HttpClientResponse>() {
   @Override
   public void handle(HttpClientResponse httpClientResponse) {
